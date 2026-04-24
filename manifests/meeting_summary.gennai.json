@@ -1,0 +1,27 @@
+{
+  "transcript": {
+    "type": "textarea",
+    "title": "会議録・メモ",
+    "required": true,
+    "max_length": 30000
+  },
+  "focus": {
+    "type": "checkbox",
+    "title": "重視する観点",
+    "items": [
+      {
+        "title": "決定事項",
+        "value": "decisions"
+      },
+      {
+        "title": "ToDo",
+        "value": "todos"
+      },
+      {
+        "title": "リスク",
+        "value": "risks"
+      }
+    ],
+    "default_value": "decisions"
+  }
+}

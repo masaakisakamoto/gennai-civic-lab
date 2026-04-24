@@ -1,0 +1,28 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e packages/gennai_app_kit
+          pip install -e packages/gennai_evals
+          pip install pytest pyyaml jsonschema fastapi uvicorn
+      - name: Unit tests
+        run: pytest -q
+      - name: Validate manifests
+        run: python scripts/validate_manifests.py
+      - name: Eval smoke tests
+        run: |
+          python packages/gennai_evals/src/gennai_evals/runner.py evals/easy_japanese.yaml
+          python packages/gennai_evals/src/gennai_evals/runner.py evals/citizen_faq.yaml

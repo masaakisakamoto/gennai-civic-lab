@@ -1,0 +1,13 @@
+{
+  "document": {
+    "type": "textarea",
+    "title": "条例・要綱案",
+    "required": true,
+    "max_length": 40000
+  },
+  "viewpoint": {
+    "type": "text",
+    "title": "確認観点",
+    "default_value": "条例・要綱チェック"
+  }
+}

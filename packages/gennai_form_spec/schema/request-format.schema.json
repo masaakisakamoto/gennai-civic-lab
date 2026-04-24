@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/gennai/request-format.schema.json",
+  "title": "Gennai AI App Request Format",
+  "type": "object",
+  "additionalProperties": {
+    "oneOf": [
+      { "$ref": "#/$defs/textLike" },
+      { "$ref": "#/$defs/number" },
+      { "$ref": "#/$defs/file" },
+      { "$ref": "#/$defs/choice" },
+      { "$ref": "#/$defs/hidden" }
+    ]
+  },
+  "$defs": {
+    "base": {
+      "type": "object",
+      "properties": {
+        "type": { "type": "string" },
+        "title": { "type": "string" },
+        "desc": { "type": "string" },
+        "required": { "type": "boolean" }
+      },
+      "required": ["type"],
+      "additionalProperties": true
+    },
+    "textLike": {
+      "allOf": [
+        { "$ref": "#/$defs/base" },
+        {
+          "type": "object",
+          "properties": {
+            "type": { "enum": ["text", "textarea"] },
+            "title": { "type": "string" },
+            "min_length": { "type": "number", "minimum": 0 },
+            "max_length": { "type": "number", "minimum": 0 },
+            "default_value": { "type": "string" }
+          },
+          "required": ["type", "title"]
+        }
+      ]
+    },
+    "number": {
+      "allOf": [
+        { "$ref": "#/$defs/base" },
+        {
+          "type": "object",
+          "properties": {
+            "type": { "const": "number" },
+            "title": { "type": "string" },
+            "min": { "type": "number", "minimum": 0 },
+            "max": { "type": "number", "minimum": 0 },
+            "default_value": { "type": "number" }
+          },
+          "required": ["type", "title"]
+        }
+      ]
+    },
+    "file": {
+      "allOf": [
+        { "$ref": "#/$defs/base" },
+        {
+          "type": "object",
+          "properties": {
+            "type": { "const": "file" },
+            "title": { "type": "string" },
+            "accept": { "type": "string" },
+            "multiple": { "type": "boolean" },
+            "max_size": { "type": "string", "pattern": "^[0-9]+(\\.[0-9]+)?(KB|MB|GB)$" },
+            "max_file_count": { "type": "number", "minimum": 1 }
+          },
+          "required": ["type", "title"]
+        }
+      ]
+    },
+    "choice": {
+      "allOf": [
+        { "$ref": "#/$defs/base" },
+        {
+          "type": "object",
+          "properties": {
+            "type": { "enum": ["select", "checkbox", "radio"] },
+            "title": { "type": "string" },
+            "items": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "properties": {
+                  "title": { "type": "string" },
+                  "value": { "type": ["string", "number"] }
+                },
+                "required": ["title", "value"],
+                "additionalProperties": false
+              }
+            },
+            "default_value": { "type": ["string", "number"] }
+          },
+          "required": ["type", "title", "items"]
+        }
+      ]
+    },
+    "hidden": {
+      "type": "object",
+      "properties": {
+        "type": { "const": "hidden" },
+        "default_value": { "type": ["string", "number"] }
+      },
+      "required": ["type", "default_value"],
+      "additionalProperties": true
+    }
+  }
+}

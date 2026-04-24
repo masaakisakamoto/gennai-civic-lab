@@ -1,0 +1,61 @@
+{
+  "text": {
+    "type": "textarea",
+    "title": "書き換えたい行政文",
+    "desc": "市民向けに分かりやすくしたい文章を入力してください。制度名・対象者・金額・期限を含む場合は、担当者確認チェックで再確認してください。",
+    "required": true,
+    "min_length": 1,
+    "max_length": 12000
+  },
+  "audience": {
+    "type": "select",
+    "title": "対象読者",
+    "desc": "誰に向けて書き換えるかを選びます。",
+    "required": true,
+    "items": [
+      { "title": "市民向け", "value": "市民向け" },
+      { "title": "高齢者向け", "value": "高齢者向け" },
+      { "title": "子育て世帯向け", "value": "子育て世帯向け" },
+      { "title": "職員向け", "value": "職員向け" }
+    ],
+    "default_value": "市民向け"
+  },
+  "tone": {
+    "type": "radio",
+    "title": "トーン",
+    "desc": "文章の雰囲気を選びます。",
+    "required": true,
+    "items": [
+      { "title": "やさしい", "value": "やさしい" },
+      { "title": "丁寧", "value": "丁寧" },
+      { "title": "短く", "value": "短く" }
+    ],
+    "default_value": "やさしい"
+  },
+  "mode": {
+    "type": "radio",
+    "title": "個人情報らしき文字列の扱い",
+    "desc": "デモや公開検証では「マスクする」を推奨します。",
+    "required": true,
+    "items": [
+      { "title": "マスクする", "value": "safe" },
+      { "title": "そのまま残す", "value": "preserve" }
+    ],
+    "default_value": "safe"
+  },
+  "preserve_terms": {
+    "type": "text",
+    "title": "必ず残す語句",
+    "desc": "制度名、部署名、固有名詞など、書き換えずに残したい語句をカンマ区切りで入力します。",
+    "required": false,
+    "max_length": 1000,
+    "default_value": ""
+  },
+  "conversation_history": {
+    "type": "textarea",
+    "title": "会話履歴",
+    "desc": "過去のやり取りを参照したい場合に使います。通常は空欄で構いません。",
+    "required": false,
+    "max_length": 12000
+  }
+}

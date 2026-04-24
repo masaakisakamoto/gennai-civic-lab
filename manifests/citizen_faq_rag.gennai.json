@@ -1,0 +1,70 @@
+{
+  "question": {
+    "type": "textarea",
+    "title": "市民からの質問",
+    "desc": "FAQや手続き案内に基づいて回答したい質問を入力してください。",
+    "required": true,
+    "min_length": 2,
+    "max_length": 3000
+  },
+  "use_sample_corpus": {
+    "type": "radio",
+    "title": "デモ用FAQコーパス",
+    "desc": "ローカルデモ用の架空FAQを使うか選びます。実運用では no にして公式データを入力してください。",
+    "required": true,
+    "items": [
+      { "title": "使う", "value": "yes" },
+      { "title": "使わない", "value": "no" }
+    ],
+    "default_value": "yes"
+  },
+  "documents": {
+    "type": "textarea",
+    "title": "追加の参照文書",
+    "desc": "FAQ、手続き案内、要綱抜粋などを貼り付けます。Markdown推奨。複数文書は見出しで区切ると検索しやすくなります。",
+    "required": false,
+    "max_length": 80000
+  },
+  "files": {
+    "type": "file",
+    "title": "参照ファイル",
+    "desc": "テキスト化済みのFAQ・手続き案内を添付します。",
+    "required": false,
+    "accept": ".txt,.md,.csv",
+    "multiple": true,
+    "max_size": "5MB",
+    "max_file_count": 5
+  },
+  "answer_style": {
+    "type": "radio",
+    "title": "回答スタイル",
+    "desc": "回答案の書き方を選びます。",
+    "required": true,
+    "items": [
+      { "title": "市民向け", "value": "市民向け" },
+      { "title": "職員向け", "value": "職員向け" },
+      { "title": "短く", "value": "短く" }
+    ],
+    "default_value": "市民向け"
+  },
+  "mode": {
+    "type": "radio",
+    "title": "個人情報らしき文字列の扱い",
+    "desc": "デモや公開検証では「マスクする」を推奨します。",
+    "required": true,
+    "items": [
+      { "title": "マスクする", "value": "safe" },
+      { "title": "そのまま残す", "value": "preserve" }
+    ],
+    "default_value": "safe"
+  },
+  "max_results": {
+    "type": "number",
+    "title": "表示する根拠数",
+    "desc": "回答に表示する参照根拠の最大数です。",
+    "required": false,
+    "min": 1,
+    "max": 6,
+    "default_value": 3
+  }
+}

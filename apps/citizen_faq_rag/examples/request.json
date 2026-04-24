@@ -1,0 +1,9 @@
+{
+  "inputs": {
+    "question": "子ども医療費助成の申請に必要なものを教えてください",
+    "use_sample_corpus": "yes",
+    "answer_style": "市民向け",
+    "mode": "safe",
+    "max_results": 3
+  }
+}

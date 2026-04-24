@@ -1,0 +1,7 @@
+services:
+  easy-japanese:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      GENNAI_LLM_PROVIDER: offline

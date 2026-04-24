@@ -1,0 +1,27 @@
+{
+  "text": {
+    "type": "textarea",
+    "title": "政策資料・説明文",
+    "required": true,
+    "max_length": 30000
+  },
+  "audience": {
+    "type": "select",
+    "title": "読み手",
+    "items": [
+      {
+        "title": "管理職",
+        "value": "管理職"
+      },
+      {
+        "title": "議会説明",
+        "value": "議会説明"
+      },
+      {
+        "title": "市民説明",
+        "value": "市民説明"
+      }
+    ],
+    "default_value": "管理職"
+  }
+}

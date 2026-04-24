@@ -1,0 +1,12 @@
+app: sports_promotion_advisor
+cases:
+  - name: sports plan
+    input:
+      inputs:
+        audience: シニア
+        goal: フレイル予防
+        budget: 小規模
+    expect_contains:
+      - スポーツ振興施策
+      - KPI
+      - 継続参加率

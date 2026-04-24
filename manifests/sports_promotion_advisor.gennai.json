@@ -1,0 +1,36 @@
+{
+  "audience": {
+    "type": "text",
+    "title": "対象者",
+    "default_value": "シニア・子育て世帯・働く世代"
+  },
+  "goal": {
+    "type": "text",
+    "title": "目的",
+    "default_value": "運動習慣の定着"
+  },
+  "budget": {
+    "type": "select",
+    "title": "予算感",
+    "items": [
+      {
+        "title": "小規模",
+        "value": "小規模"
+      },
+      {
+        "title": "中規模",
+        "value": "中規模"
+      },
+      {
+        "title": "大規模",
+        "value": "大規模"
+      }
+    ],
+    "default_value": "小規模"
+  },
+  "constraints": {
+    "type": "textarea",
+    "title": "制約・地域課題",
+    "required": false
+  }
+}
