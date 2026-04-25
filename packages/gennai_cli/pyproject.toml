@@ -1,0 +1,14 @@
+[project]
+name = "gennai-cli"
+version = "0.4.0"
+description = "Scaffold Gennai-compatible civic AI apps"
+requires-python = ">=3.11"
+readme = "README.md"
+license = {text = "MIT"}
+
+[project.scripts]
+gennai-create-app = "gennai_cli.create_app:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"

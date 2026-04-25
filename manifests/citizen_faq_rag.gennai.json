@@ -13,8 +13,14 @@
     "desc": "ローカルデモ用の架空FAQを使うか選びます。実運用では no にして公式データを入力してください。",
     "required": true,
     "items": [
-      { "title": "使う", "value": "yes" },
-      { "title": "使わない", "value": "no" }
+      {
+        "title": "使う",
+        "value": "yes"
+      },
+      {
+        "title": "使わない",
+        "value": "no"
+      }
     ],
     "default_value": "yes"
   },
@@ -41,9 +47,18 @@
     "desc": "回答案の書き方を選びます。",
     "required": true,
     "items": [
-      { "title": "市民向け", "value": "市民向け" },
-      { "title": "職員向け", "value": "職員向け" },
-      { "title": "短く", "value": "短く" }
+      {
+        "title": "市民向け",
+        "value": "市民向け"
+      },
+      {
+        "title": "職員向け",
+        "value": "職員向け"
+      },
+      {
+        "title": "短く",
+        "value": "短く"
+      }
     ],
     "default_value": "市民向け"
   },
@@ -53,10 +68,37 @@
     "desc": "デモや公開検証では「マスクする」を推奨します。",
     "required": true,
     "items": [
-      { "title": "マスクする", "value": "safe" },
-      { "title": "そのまま残す", "value": "preserve" }
+      {
+        "title": "マスクする",
+        "value": "safe"
+      },
+      {
+        "title": "そのまま残す",
+        "value": "preserve"
+      }
     ],
     "default_value": "safe"
+  },
+  "retrieval_backend": {
+    "type": "select",
+    "title": "検索方式",
+    "desc": "ローカルで再現可能な検索方式を選びます。hybridはlexicalとBM25を組み合わせます。",
+    "required": true,
+    "items": [
+      {
+        "title": "Lexical（安定・説明しやすい）",
+        "value": "lexical"
+      },
+      {
+        "title": "BM25（単語頻度ベース）",
+        "value": "bm25"
+      },
+      {
+        "title": "Hybrid（Lexical + BM25）",
+        "value": "hybrid"
+      }
+    ],
+    "default_value": "lexical"
   },
   "max_results": {
     "type": "number",

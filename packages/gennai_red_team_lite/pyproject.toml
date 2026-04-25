@@ -1,0 +1,15 @@
+[project]
+name = "gennai-red-team-lite"
+version = "0.4.0"
+description = "Tiny red-team smoke runner for Gennai-compatible civic AI apps"
+requires-python = ">=3.11"
+dependencies = ["pyyaml>=6"]
+readme = "README.md"
+license = {text = "MIT"}
+
+[project.scripts]
+gennai-red-team-lite = "gennai_red_team_lite.runner:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"

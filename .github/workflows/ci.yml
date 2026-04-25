@@ -17,6 +17,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install -e packages/gennai_app_kit
           pip install -e packages/gennai_evals
+          pip install -e packages/gennai_cli
+          pip install -e packages/gennai_local_runner
+          pip install -e packages/gennai_red_team_lite
           pip install pytest pyyaml jsonschema fastapi uvicorn
       - name: Unit tests
         run: pytest -q
@@ -26,3 +29,5 @@ jobs:
         run: |
           python packages/gennai_evals/src/gennai_evals/runner.py evals/easy_japanese.yaml
           python packages/gennai_evals/src/gennai_evals/runner.py evals/citizen_faq.yaml
+      - name: Red-team smoke tests
+        run: python packages/gennai_red_team_lite/src/gennai_red_team_lite/runner.py evals/red_team.yaml

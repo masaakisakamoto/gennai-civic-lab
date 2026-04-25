@@ -23,9 +23,10 @@ from gennai_app_kit import (
     require_text,
 )
 
-from .retriever import SearchHit, build_documents, excerpt, is_answerable, load_corpus_text, search
+from .retriever import SearchHit, build_documents, excerpt, is_answerable, load_corpus_text
+from .search_backends import get_search_backend
 
-APP_VERSION = "0.3.0"
+APP_VERSION = "0.4.0"
 SAMPLE_CORPUS = Path(__file__).resolve().parent / "corpus" / "sample_faq.md"
 
 GENERIC_MATCH_FRAGMENTS = (
@@ -194,6 +195,7 @@ def handle(payload: dict[str, Any]) -> dict[str, str]:
         mode = get_choice(inputs, "mode", allowed=["safe", "preserve"], default="safe")
         style = get_choice(inputs, "answer_style", allowed=["市民向け", "職員向け", "短く"], default="市民向け")
         max_results = _as_int(inputs.get("max_results"), default=3, minimum=1, maximum=6)
+        retrieval_backend_name = get_choice(inputs, "retrieval_backend", allowed=["lexical", "bm25", "hybrid"], default="lexical")
 
         corpora = _collect_corpora(inputs)
         if not corpora:
@@ -217,7 +219,8 @@ def handle(payload: dict[str, Any]) -> dict[str, str]:
             safe_corpora = redacted_corpora
 
         docs = build_documents(safe_corpora)
-        hits = search(safe_question, docs, limit=max_results)
+        backend = get_search_backend(retrieval_backend_name)
+        hits = backend.search(safe_question, docs, limit=max_results)
         grounded = _grounded_enough(hits)
         answer, checks = _format_answer(safe_question, hits, style=style)
 
@@ -230,12 +233,13 @@ def handle(payload: dict[str, Any]) -> dict[str, str]:
                 ("判断", [
                     f"回答可能性: {'参照文書に基づいて回答可能' if grounded else '根拠不足のため断定不可'}",
                     f"検索ヒット数: {len(hits)}",
+                    f"検索方式: {backend.name}",
                     f"回答スタイル: {style}",
                 ]),
                 ("担当者確認チェック", checks),
                 ("安全性メモ", _format_safety_notes(safe_question, safe_corpora, pii_counts)),
                 ("品質メモ", [
-                    "deterministic lexical retrieverで検索しています。外部APIキーなしで再現可能です。",
+                    f"deterministic {backend.name} retrieverで検索しています。外部APIキーなしで再現可能です。",
                     "本番では、自治体公式FAQ・要綱・更新日付き文書に差し替えてください。",
                     "根拠なし断定を避けるため、低スコア時は担当課確認へ誘導します。",
                     f"アプリ版: {APP_VERSION}",

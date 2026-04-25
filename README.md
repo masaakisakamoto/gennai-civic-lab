@@ -18,6 +18,8 @@
 - ルールベースfallbackによるローカルデモ
 - PIIマスキング、プロンプトインジェクション検知、監査ログの雛形
 - YAML評価ケースによる回帰テスト（easy Japanese + Citizen FAQ RAG）
+- v0.4 local runner UIによるブラウザ上の開発体験
+- v0.4 red-team smoke testsによる最低限の安全性回帰テスト
 - manifest JSON Schemaと検証CLI
 - Docker / CI / Makefile / ドキュメント
 
@@ -36,8 +38,9 @@ packages/
   gennai_app_kit/              # Python SDK: request/response, guardrails, LLM adapter
   gennai_evals/                # YAML eval runner
   gennai_cli/                  # app scaffold CLI
-  gennai_local_runner/         # local mock runner skeleton
+  gennai_local_runner/         # v0.4 local browser UI for manifests and endpoints
   gennai_form_spec/            # manifest JSON Schema
+  gennai_red_team_lite/        # v0.4 prompt-injection / PII / hallucination smoke tests
 
 manifests/                     # 源内Webに登録するリクエスト形式JSON例
 evals/                         # 評価ケース
@@ -105,6 +108,38 @@ curl -X POST http://127.0.0.1:8001/ \
 ```
 
 v0.3 adds a deterministic, evidence-first RAG app for civic FAQ and procedure guidance. It returns references, excerpts, safety notes, and abstains when the evidence is weak.
+
+
+### Run the local browser runner
+
+v0.4 adds a local UI that reads `manifests/*.gennai.json`, renders an input form, calls a local Gennai-compatible endpoint, and displays the returned Markdown.
+
+Terminal A:
+
+```bash
+make run-faq-rag
+```
+
+Terminal B:
+
+```bash
+make run-local-runner
+```
+
+Open:
+
+```text
+http://127.0.0.1:8010/
+```
+
+### Run red-team smoke tests
+
+```bash
+make red-team
+```
+
+The red-team smoke suite checks that the apps do not treat prompt-injection text as instructions, redact common PII in safe mode, and abstain when FAQ evidence is weak.
+
 
 ### Optional LLM mode
 

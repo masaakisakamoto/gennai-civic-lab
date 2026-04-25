@@ -1,7 +1,16 @@
 services:
-  easy-japanese:
+  easy-ja:
     build: .
+    command: uvicorn apps.easy_japanese_rewriter.app:app --host 0.0.0.0 --port 8000
     ports:
       - "8000:8000"
-    environment:
-      GENNAI_LLM_PROVIDER: offline
+  faq-rag:
+    build: .
+    command: uvicorn apps.citizen_faq_rag.app:app --host 0.0.0.0 --port 8001
+    ports:
+      - "8001:8001"
+  local-runner:
+    build: .
+    command: uvicorn gennai_local_runner.app:app --host 0.0.0.0 --port 8010
+    ports:
+      - "8010:8010"

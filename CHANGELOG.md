@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.4.0
+
+- Added `gennai-local-runner`, a local browser UI that renders manifest-based forms and calls localhost Gennai-compatible endpoints.
+- Added `gennai-red-team-lite` with prompt-injection, PII, and hallucination smoke tests.
+- Upgraded `gennai-cli` to scaffold app, manifest, eval, and test files.
+- Added pluggable Citizen FAQ RAG search backends: lexical, BM25, and hybrid.
+- Added v0.4 tests for local runner, CLI scaffolding, search backends, and red-team runner.
+- Updated CI, Makefile, docs, and README for the v0.4 developer experience.
+
 ## v0.3.0
 
 - Added `citizen_faq_rag` as a grounded, evidence-first civic FAQ RAG app.

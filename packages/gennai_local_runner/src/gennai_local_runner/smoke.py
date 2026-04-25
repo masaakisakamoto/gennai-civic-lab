@@ -2,24 +2,22 @@ from __future__ import annotations
 
 import json
 import sys
-import urllib.request
+
+from .client import EndpointError, call_gennai_endpoint
 
 
 def main(argv: list[str]) -> int:
     if len(argv) < 2:
         print("usage: smoke.py URL JSON_PAYLOAD", file=sys.stderr)
         return 2
-    url, payload = argv[0], argv[1]
-    data = payload.encode("utf-8")
-    req = urllib.request.Request(
-        url,
-        data=data,
-        headers={"Content-Type": "application/json"},
-        method="POST",
-    )
-    with urllib.request.urlopen(req, timeout=30) as res:  # nosec B310 - developer-supplied local URL
-        body = json.loads(res.read().decode("utf-8"))
-    print(body.get("outputs", body))
+    url, payload_json = argv[0], argv[1]
+    try:
+        payload = json.loads(payload_json)
+        body = call_gennai_endpoint(url, payload)
+    except (json.JSONDecodeError, EndpointError) as e:
+        print(f"error: {e}", file=sys.stderr)
+        return 1
+    print(body["outputs"])
     return 0
 
 

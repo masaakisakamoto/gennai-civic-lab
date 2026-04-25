@@ -44,3 +44,24 @@ For production use, add these controls before using real municipal data:
 - Evaluate both answerable questions and intentionally unanswerable questions.
 - Log source IDs and confidence signals, not raw personal data.
 - Define a human review flow for policy-sensitive or legally sensitive responses.
+
+
+## v0.4 red-team smoke tests
+
+Run:
+
+```bash
+make red-team
+```
+
+Current smoke cases verify:
+
+- safe-mode PII redaction
+- unsupported FAQ questions abstain instead of hallucinating
+- prompt-injection text is detected and treated as user/source text
+
+These checks are intentionally small and deterministic. They should be expanded before any production or municipality-facing deployment.
+
+## Local runner endpoint policy
+
+`gennai-local-runner` only calls `http://127.0.0.1:*` and `http://localhost:*` by default. This avoids accidental remote submission during demos.

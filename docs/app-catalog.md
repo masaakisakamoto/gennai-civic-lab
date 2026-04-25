@@ -38,3 +38,12 @@ Recommended demo question:
 ```text
 子ども医療費助成の申請に必要なものを教えてください
 ```
+
+
+## v0.4 Developer tools
+
+| Tool | Purpose |
+|---|---|
+| `gennai-local-runner` | manifestからフォームを生成し、ローカルAPIにPOSTして結果を確認する |
+| `gennai-cli` | 新しい源内互換アプリのapp/manifest/eval/testを生成する |
+| `gennai-red-team-lite` | prompt injection / PII / 根拠なし回答のsmoke testを実行する |

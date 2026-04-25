@@ -68,3 +68,26 @@ question
 ```
 
 Production deployments can swap the retriever for BM25, vector search, hybrid search, or a managed search service while keeping the app-level contract unchanged.
+
+
+## v0.4 local developer loop
+
+```text
+manifests/*.gennai.json
+  -> gennai-local-runner
+  -> localhost app endpoint
+  -> { "outputs": "Markdown" }
+  -> browser result panel
+```
+
+`gennai-local-runner` intentionally stays outside the app runtime. It is a developer aid for testing the same request/response shape expected by Gennai-compatible external apps.
+
+Citizen FAQ RAG now uses a backend interface:
+
+```text
+question + documents
+  -> SearchBackend
+    -> lexical | bm25 | hybrid
+  -> SearchHit[]
+  -> grounded answer formatter
+```

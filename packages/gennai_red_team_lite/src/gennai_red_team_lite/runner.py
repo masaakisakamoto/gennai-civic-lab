@@ -14,25 +14,21 @@ except Exception:  # pragma: no cover
 
 APP_MODULES = {
     "easy_japanese_rewriter": "apps.easy_japanese_rewriter.app",
-    "meeting_summary": "apps.meeting_summary.app",
     "citizen_faq_rag": "apps.citizen_faq_rag.app",
-    "sports_promotion_advisor": "apps.sports_promotion_advisor.app",
-    "policy_briefing": "apps.policy_briefing.app",
-    "ordinance_checklist": "apps.ordinance_checklist.app",
 }
 
 
 @dataclass(frozen=True)
-class EvalResult:
+class RedTeamResult:
     ok: bool
     message: str
+    risk: str
 
 
 def load_handle(app_name: str):
     if app_name not in APP_MODULES:
-        raise KeyError(f"unknown app: {app_name}")
-    module = importlib.import_module(APP_MODULES[app_name])
-    return module.handle
+        raise KeyError(f"unknown red-team app: {app_name}")
+    return importlib.import_module(APP_MODULES[app_name]).handle
 
 
 def _expectation_to_text(value: Any) -> str:
@@ -46,7 +42,9 @@ def _expectations(case: dict[str, Any], key: str) -> list[str]:
     return [_expectation_to_text(value) for value in case.get(key, [])]
 
 
-def run_case(app_name: str, case: dict[str, Any]) -> EvalResult:
+def run_case(case: dict[str, Any]) -> RedTeamResult:
+    app_name = case["app"]
+    risk = str(case.get("risk", "unspecified"))
     handle = load_handle(app_name)
     result = handle(case["input"])
     out = result.get("outputs", "")
@@ -62,28 +60,29 @@ def run_case(app_name: str, case: dict[str, Any]) -> EvalResult:
         errors.append(f"forbidden={forbidden}")
     if regex_missing:
         errors.append(f"regex_missing={regex_missing}")
+
+    name = str(case.get("name", app_name))
     if errors:
-        return EvalResult(False, f"{case['name']}: " + "; ".join(errors))
-    return EvalResult(True, f"{case['name']}: ok")
+        return RedTeamResult(False, f"{name}: " + "; ".join(errors), risk)
+    return RedTeamResult(True, f"{name}: ok", risk)
 
 
-def run_file(file: Path) -> int:
-    data = yaml.safe_load(file.read_text(encoding="utf-8"))
+def run_file(path: Path) -> int:
+    data = yaml.safe_load(path.read_text(encoding="utf-8"))
     failures = 0
     for case in data.get("cases", []):
-        result = run_case(data["app"], case)
-        print(("✅ " if result.ok else "❌ ") + result.message)
+        result = run_case(case)
+        prefix = "✅" if result.ok else "❌"
+        print(f"{prefix} [{result.risk}] {result.message}")
         failures += 0 if result.ok else 1
     return failures
 
 
-def main(argv: list[str]) -> int:
+def main(argv: list[str] | None = None) -> int:
     if yaml is None:
         print("pyyaml is required: pip install pyyaml", file=sys.stderr)
         return 2
-    if not argv:
-        print("usage: runner.py evals/*.yaml", file=sys.stderr)
-        return 2
+    argv = argv or ["evals/red_team.yaml"]
 
     repo_root = Path(__file__).resolve().parents[4]
     sys.path.insert(0, str(repo_root))

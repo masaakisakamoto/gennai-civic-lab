@@ -75,3 +75,16 @@ cases:
       - プロンプトインジェクション
       - 粗大ごみ
       - FAQ-002
+  - name: hybrid backend returns source
+    input:
+      inputs:
+        question: 体育館の予約方法を教えてください
+        use_sample_corpus: yes
+        answer_style: 市民向け
+        mode: safe
+        retrieval_backend: hybrid
+        max_results: 3
+    expect_contains:
+      - 体育館
+      - "検索方式: hybrid"
+      - 回答可能性: 参照文書に基づいて回答可能

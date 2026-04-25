@@ -1,0 +1,15 @@
+[project]
+name = "gennai-local-runner"
+version = "0.4.0"
+description = "Local browser UI for trying Gennai-compatible AI apps"
+requires-python = ">=3.11"
+dependencies = ["fastapi>=0.100", "uvicorn>=0.20"]
+readme = "README.md"
+license = {text = "MIT"}
+
+[project.scripts]
+gennai-local-runner = "gennai_local_runner.app:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
