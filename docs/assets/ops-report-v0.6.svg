@@ -1,0 +1,23 @@
+<svg width="980" height="520" viewBox="0 0 980 520" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="980" height="520" rx="28" fill="#F8FAFC"/>
+  <rect x="40" y="40" width="900" height="440" rx="20" fill="white" stroke="#CBD5E1"/>
+  <text x="70" y="88" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#0F172A">Gennai Operational Report</text>
+  <text x="70" y="122" font-family="Arial, sans-serif" font-size="16" fill="#475569">metadata-first eval, trace, and deployment evidence</text>
+  <rect x="70" y="155" width="260" height="120" rx="16" fill="#ECFDF5" stroke="#10B981"/>
+  <text x="92" y="192" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#065F46">Eval Gate</text>
+  <text x="92" y="226" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#047857">10/10</text>
+  <text x="92" y="252" font-family="Arial, sans-serif" font-size="14" fill="#065F46">passed before promotion</text>
+  <rect x="370" y="155" width="260" height="120" rx="16" fill="#EFF6FF" stroke="#3B82F6"/>
+  <text x="392" y="192" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#1E3A8A">Trace Health</text>
+  <text x="392" y="226" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#1D4ED8">0 errors</text>
+  <text x="392" y="252" font-family="Arial, sans-serif" font-size="14" fill="#1E3A8A">safe JSONL metadata</text>
+  <rect x="670" y="155" width="260" height="120" rx="16" fill="#FFFBEB" stroke="#F59E0B"/>
+  <text x="692" y="192" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#92400E">Deploy Ready</text>
+  <text x="692" y="226" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#B45309">4</text>
+  <text x="730" y="226" font-family="Arial, sans-serif" font-size="20" fill="#92400E">blueprints</text>
+  <text x="692" y="252" font-family="Arial, sans-serif" font-size="14" fill="#92400E">local / compose / AWS / Azure</text>
+  <rect x="70" y="315" width="860" height="100" rx="16" fill="#F1F5F9" stroke="#CBD5E1"/>
+  <text x="92" y="350" font-family="Arial, sans-serif" font-size="17" font-weight="700" fill="#334155">Quality Gate</text>
+  <text x="92" y="382" font-family="Arial, sans-serif" font-size="15" fill="#475569">make test → validate-manifests → eval → red-team → eval-report → demo-traces → ops-report</text>
+  <text x="92" y="408" font-family="Arial, sans-serif" font-size="14" fill="#64748B">No raw citizen prompts or documents are required for operational evidence.</text>
+</svg>

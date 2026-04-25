@@ -1,5 +1,23 @@
 # Changelog
 
+## v0.6.0
+
+### Added
+
+- `gennai_observability` package for metadata-first tracing, metrics summaries, and operational reports.
+- `make demo-traces` and `make ops-report`.
+- `scripts/generate_demo_traces.py` and `scripts/generate_ops_report.py`.
+- Deployment blueprints for local, Docker Compose, AWS, and Azure.
+- `docs/operations.md` and `docs/v0.6-implementation-notes.md`.
+- README operational report diagram.
+
+### Design notes
+
+- Observability remains dependency-free and PII-conscious.
+- Demo traces store app/version/status/duration and safe metadata, not raw citizen text.
+- Blueprints are conservative references, not production one-click automation.
+
+
 ## v0.5.0
 
 - Upgraded `gennai-local-runner` with Markdown preview, raw outputs tab, payload preview, and curl export.

@@ -8,6 +8,8 @@ try:
 except Exception:  # pragma: no cover
     FastAPI = None
 
+from gennai_observability import add_observability_routes, observe_call
+
 from gennai_app_kit import (
     ChatMessage,
     GennaiPayloadError,
@@ -25,7 +27,7 @@ from gennai_app_kit import (
     require_text,
 )
 
-APP_VERSION = "0.2.0"
+APP_VERSION = "0.6.0"
 MAX_TEXT_CHARS = 12_000
 
 REPLACEMENTS: dict[str, str] = {
@@ -262,14 +264,11 @@ def handle(payload: dict, *, client: LLMClient | None = None) -> dict[str, str]:
 
 if FastAPI:
     app = FastAPI(title="gennai-civic-easy-japanese", version=APP_VERSION)
-
-    @app.get("/healthz")
-    def healthz() -> dict[str, str]:
-        return {"status": "ok", "version": APP_VERSION}
+    add_observability_routes(app, app_name="easy_japanese_rewriter", app_version=APP_VERSION)
 
     @app.post("/")
     def run(payload: dict) -> dict[str, str]:
-        return handle(payload)
+        return observe_call("easy_japanese_rewriter", APP_VERSION, payload, lambda: handle(payload))
 else:  # pragma: no cover
     app = None
 

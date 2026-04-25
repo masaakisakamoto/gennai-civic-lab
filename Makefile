@@ -1,4 +1,4 @@
-.PHONY: install test eval eval-easy-ja eval-faq-rag eval-report red-team run-easy-ja run-faq-rag run-local-runner validate-manifests import-faq-demo zip
+.PHONY: install test eval eval-easy-ja eval-faq-rag eval-report demo-traces ops-report red-team run-easy-ja run-faq-rag run-local-runner validate-manifests import-faq-demo zip
 
 install:
 	python -m pip install --upgrade pip
@@ -7,6 +7,7 @@ install:
 	pip install -e packages/gennai_cli
 	pip install -e packages/gennai_local_runner
 	pip install -e packages/gennai_red_team_lite
+	pip install -e packages/gennai_observability
 	pip install fastapi uvicorn pytest pyyaml jsonschema
 
 test:
@@ -26,6 +27,13 @@ eval-report:
 
 red-team:
 	python packages/gennai_red_team_lite/src/gennai_red_team_lite/runner.py evals/red_team.yaml
+
+demo-traces:
+	mkdir -p reports
+	python scripts/generate_demo_traces.py --output reports/traces.jsonl
+
+ops-report: eval-report demo-traces
+	python scripts/generate_ops_report.py --eval-json reports/eval-report.json --traces-jsonl reports/traces.jsonl --markdown-report reports/ops-report.md --json-report reports/ops-report.json
 
 run-easy-ja:
 	uvicorn apps.easy_japanese_rewriter.app:app --reload --port 8000

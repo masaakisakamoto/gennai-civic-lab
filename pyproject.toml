@@ -1,5 +1,5 @@
 [tool.pytest.ini_options]
-pythonpath = [".", "packages/gennai_app_kit/src", "packages/gennai_evals/src", "packages/gennai_cli/src", "packages/gennai_local_runner/src", "packages/gennai_red_team_lite/src"]
+pythonpath = [".", "packages/gennai_app_kit/src", "packages/gennai_evals/src", "packages/gennai_cli/src", "packages/gennai_local_runner/src", "packages/gennai_red_team_lite/src", "packages/gennai_observability/src"]
 testpaths = ["tests"]
 addopts = "-q"
 

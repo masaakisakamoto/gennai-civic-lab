@@ -8,6 +8,8 @@ try:
 except Exception:  # pragma: no cover
     FastAPI = None
 
+from gennai_observability import add_observability_routes, observe_call
+
 from gennai_app_kit import (
     GennaiPayloadError,
     GennaiValidationError,
@@ -26,7 +28,7 @@ from gennai_app_kit import (
 from .retriever import SearchHit, build_documents, excerpt, is_answerable, load_corpus_text
 from .search_backends import get_search_backend
 
-APP_VERSION = "0.5.0"
+APP_VERSION = "0.6.0"
 SAMPLE_CORPUS = Path(__file__).resolve().parent / "corpus" / "sample_faq.md"
 
 GENERIC_MATCH_FRAGMENTS = (
@@ -255,9 +257,10 @@ def handle(payload: dict[str, Any]) -> dict[str, str]:
 
 if FastAPI:
     app = FastAPI(title="citizen-faq-rag", version=APP_VERSION)
+    add_observability_routes(app, app_name="citizen_faq_rag", app_version=APP_VERSION)
 
     @app.post("/")
     def run(payload: dict[str, Any]) -> dict[str, str]:
-        return handle(payload)
+        return observe_call("citizen_faq_rag", APP_VERSION, payload, lambda: handle(payload))
 else:  # pragma: no cover
     app = None

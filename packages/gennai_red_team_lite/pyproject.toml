@@ -1,6 +1,6 @@
 [project]
 name = "gennai-red-team-lite"
-version = "0.5.0"
+version = "0.6.0"
 description = "Tiny red-team smoke runner for Gennai-compatible civic AI apps"
 requires-python = ">=3.11"
 dependencies = ["pyyaml>=6"]

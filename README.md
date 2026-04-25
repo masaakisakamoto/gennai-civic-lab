@@ -8,6 +8,8 @@
 
 ![Gennai Local Runner v0.5 illustrative screenshot](docs/assets/local-runner-v0.5.svg)
 
+![Gennai Operational Report v0.6](docs/assets/ops-report-v0.6.svg)
+
 ## What this repository demonstrates
 
 `gennai-civic-lab` is not a prompt demo. It is a small but coherent engineering system for public-sector AI apps:
@@ -17,8 +19,9 @@
 - **Developer experience**: local browser runner, manifest-driven forms, curl export
 - **Quality gates**: unit tests, manifest validation, YAML evals, red-team smoke tests
 - **Safety posture**: PII redaction helpers, prompt-injection detection, abstention on weak evidence
-- **Operational artifacts**: Markdown/JSON eval reports and PII-conscious audit event primitives
+- **Operational artifacts**: Markdown/JSON eval reports, metadata-first traces, metrics summaries, and PII-conscious audit event primitives
 - **Data onboarding**: CSV/JSONL FAQ corpus import for `citizen_faq_rag`
+- **Deployment readiness**: local, Docker Compose, AWS, and Azure blueprints
 
 ## Architecture
 
@@ -32,7 +35,9 @@ flowchart LR
   F --> G[YAML evals]
   F --> H[Red-team smoke tests]
   F --> I[Audit event primitives]
+  F --> K[Metadata-first traces]
   G --> J[Markdown / JSON reports]
+  K --> L[Operational report]
 ```
 
 ## Repository map
@@ -53,14 +58,18 @@ packages/
   gennai_local_runner/         # v0.5 local browser UI, Markdown preview, curl export
   gennai_form_spec/            # manifest JSON Schema
   gennai_red_team_lite/        # prompt-injection / PII / hallucination smoke tests
+  gennai_observability/        # v0.6 traces, metrics summaries, operational reports
 
 scripts/
   validate_manifests.py
   import_faq_corpus.py
+  generate_demo_traces.py
+  generate_ops_report.py
 
 manifests/                     # 源内Webに登録するリクエスト形式JSON例
 evals/                         # 評価ケース
 docs/                          # 設計・セキュリティ・OSS戦略
+blueprints/                    # local / Docker Compose / AWS / Azure deployment notes
 tests/                         # unit tests
 ```
 
@@ -74,6 +83,8 @@ make test
 make validate-manifests
 make eval
 make red-team
+make eval-report
+make ops-report
 ```
 
 Expected quality gates:
@@ -83,6 +94,7 @@ pytest: all tests pass
 manifest validation: 6 manifests OK
 eval: easy_japanese + citizen_faq pass
 red-team: PII / injection / abstention smoke tests pass
+ops-report: eval + trace operational report generated
 ```
 
 ## Run the local browser runner
@@ -158,6 +170,37 @@ reports/eval-report.json
 
 These files are intentionally ignored by Git so each run can create fresh local artifacts.
 
+## Generate operational reports
+
+v0.6 adds metadata-first traces and an operational report. This gives reviewers a small evidence bundle without storing raw citizen text.
+
+```bash
+make ops-report
+```
+
+Outputs:
+
+```text
+reports/traces.jsonl
+reports/ops-report.md
+reports/ops-report.json
+```
+
+The demo trace generator records app id, request duration, status, backend, and hit counts. It does **not** record raw prompts or raw documents. See [`docs/operations.md`](docs/operations.md).
+
+## Deployment blueprints
+
+v0.6 includes practical deployment notes:
+
+```text
+blueprints/local/
+blueprints/docker-compose/
+blueprints/aws/
+blueprints/azure/
+```
+
+These are intentionally conservative. Local Runner should remain internal-only, and production systems should use private networking, authentication, least-privilege credentials, and metadata-only logging.
+
 ## Import FAQ data
 
 Create or edit `examples/faq_sample.csv`, then run:
@@ -225,6 +268,9 @@ Manifest schema validation
 Local browser runner
 Curl export
 Audit event primitives
+Metadata-first traces
+Operational reports
+Deployment blueprints
 Clear unofficial status
 ```
 
@@ -236,6 +282,7 @@ Clear unofficial status
 | v0.3 | `citizen_faq_rag` grounded RAG app |
 | v0.4 | Local runner, CLI scaffold, RAG backends, red-team smoke tests |
 | v0.5 | Markdown preview, curl export, eval reports, FAQ import, audit primitives, README polish |
+| v0.6 | Observability package, operational reports, demo traces, deployment blueprints |
 
 ## License
 
