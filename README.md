@@ -1,3 +1,18 @@
+<p align="right">
+  Language: <a href="./README.md">English</a> | <a href="./README.ja.md">日本語</a>
+</p>
+
+> **For Japanese readers / 日本語で読みたい方へ**  
+> A Japanese introduction is available for civic, educational, and non-engineering audiences.  
+> 日本語での説明は [README.ja.md](./README.ja.md) をご覧ください。
+
+## Website
+
+A more readable project overview is available here:
+
+- English: https://masaakisakamoto.github.io/gennai-civic-lab/
+- Japanese: https://masaakisakamoto.github.io/gennai-civic-lab/ja/
+
 # gennai-civic-lab
 
 [![CI](https://github.com/masaakisakamoto/gennai-civic-lab/actions/workflows/ci.yml/badge.svg)](https://github.com/masaakisakamoto/gennai-civic-lab/actions/workflows/ci.yml)
