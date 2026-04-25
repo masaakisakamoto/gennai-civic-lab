@@ -1,13 +1,12 @@
 from __future__ import annotations
 
 import argparse
-import html
 import json
 from pathlib import Path
 from typing import Any
 
 from .catalog import build_default_inputs, load_catalog, repo_root_from
-from .client import EndpointError, call_gennai_endpoint
+from .client import EndpointError, call_gennai_endpoint, export_curl_command, pretty_payload
 
 try:
     from fastapi import FastAPI
@@ -17,7 +16,7 @@ except Exception:  # pragma: no cover
     HTMLResponse = None
     JSONResponse = None
 
-APP_VERSION = "0.4.0"
+APP_VERSION = "0.5.0"
 
 
 HTML = r"""
@@ -30,29 +29,41 @@ HTML = r"""
   <style>
     :root { color-scheme: light; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
     body { margin: 0; background: #f7f7f8; color: #1f2937; }
-    header { background: #111827; color: white; padding: 22px 28px; }
-    main { max-width: 1180px; margin: 0 auto; padding: 24px; display: grid; grid-template-columns: 390px 1fr; gap: 20px; }
+    header { background: linear-gradient(135deg, #111827, #1f2937); color: white; padding: 22px 28px; }
+    header code { color: #d1fae5; }
+    main { max-width: 1220px; margin: 0 auto; padding: 24px; display: grid; grid-template-columns: 390px 1fr; gap: 20px; }
     section, aside { background: white; border: 1px solid #e5e7eb; border-radius: 14px; padding: 18px; box-shadow: 0 1px 2px rgba(0,0,0,.03); }
     label { display: block; font-weight: 650; margin: 14px 0 6px; }
     small { color: #6b7280; display:block; margin-bottom: 5px; line-height: 1.45; }
     input, textarea, select { box-sizing: border-box; width: 100%; border: 1px solid #d1d5db; border-radius: 10px; padding: 10px 11px; font: inherit; background: white; }
-    textarea { min-height: 110px; resize: vertical; }
+    textarea { min-height: 112px; resize: vertical; }
     button { border: 0; border-radius: 999px; padding: 10px 16px; font-weight: 700; cursor: pointer; }
     button.primary { background: #111827; color: white; }
     button.secondary { background: #e5e7eb; color: #111827; }
+    button.ghost { background: transparent; color: #374151; border: 1px solid #d1d5db; }
     .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
     .pill { display: inline-block; background: #eef2ff; color: #3730a3; padding: 4px 9px; border-radius: 999px; font-size: 12px; font-weight: 700; }
-    pre { white-space: pre-wrap; overflow-wrap: anywhere; background: #0b1020; color: #e5e7eb; padding: 16px; border-radius: 12px; min-height: 260px; }
     .muted { color: #6b7280; }
     .error { color: #b91c1c; font-weight: 700; }
+    .grid-full { grid-column: 1 / -1; }
+    .tabs { display:flex; gap:8px; margin: 12px 0; flex-wrap: wrap; }
+    .tab { border-radius: 999px; padding: 8px 12px; background:#f3f4f6; color:#374151; }
+    .tab.active { background:#111827; color:white; }
+    pre { white-space: pre-wrap; overflow-wrap: anywhere; background: #0b1020; color: #e5e7eb; padding: 16px; border-radius: 12px; min-height: 220px; }
+    .preview { border: 1px solid #e5e7eb; border-radius: 12px; padding: 18px; min-height: 220px; background:#fff; line-height:1.65; }
+    .preview h1 { font-size: 1.45rem; border-bottom:1px solid #e5e7eb; padding-bottom:8px; }
+    .preview h2 { font-size: 1.15rem; margin-top:1.2rem; }
+    .preview code { background:#f3f4f6; border-radius:4px; padding:1px 4px; }
+    .preview ul { padding-left: 1.3rem; }
+    .hidden { display:none; }
     @media (max-width: 900px) { main { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
 <header>
-  <div class="pill">v0.4 local DX</div>
+  <div class="pill">v0.5 developer experience</div>
   <h1>Gennai Local Runner</h1>
-  <p>manifestを読み込み、ローカルの源内互換APIへPOSTして、<code>outputs</code> Markdownを確認する開発用UIです。</p>
+  <p>manifestからフォームを生成し、ローカルの源内互換APIへPOSTし、<code>outputs</code> Markdownをプレビューします。</p>
 </header>
 <main>
   <aside>
@@ -71,15 +82,37 @@ HTML = r"""
     <h2>Inputs</h2>
     <div id="form"></div>
   </section>
-  <section style="grid-column: 1 / -1;">
-    <h2>Result</h2>
+  <section class="grid-full">
+    <div class="row">
+      <h2 style="margin-right:auto;">Request</h2>
+      <button class="ghost" onclick="refreshRequestPreview()">payload更新</button>
+      <button class="ghost" onclick="loadCurl()">curl生成</button>
+    </div>
+    <div class="tabs">
+      <button class="tab active" id="tab-payload" onclick="showRequestTab('payload')">JSON payload</button>
+      <button class="tab" id="tab-curl" onclick="showRequestTab('curl')">curl export</button>
+    </div>
+    <pre id="payloadPreview"></pre>
+    <pre id="curlPreview" class="hidden"></pre>
+  </section>
+  <section class="grid-full">
+    <div class="row">
+      <h2 style="margin-right:auto;">Result</h2>
+      <button class="ghost" onclick="copyResult()">結果をコピー</button>
+    </div>
     <p id="status" class="muted">未実行</p>
-    <pre id="result"></pre>
+    <div class="tabs">
+      <button class="tab active" id="tab-preview" onclick="showResultTab('preview')">Markdown preview</button>
+      <button class="tab" id="tab-raw" onclick="showResultTab('raw')">Raw outputs</button>
+    </div>
+    <div id="resultPreview" class="preview"></div>
+    <pre id="resultRaw" class="hidden"></pre>
   </section>
 </main>
 <script>
 let catalog = [];
 let active = null;
+let lastOutputs = '';
 
 async function init() {
   const res = await fetch('/api/catalog');
@@ -108,6 +141,9 @@ function selectApp(appId) {
   active = catalog.find(x => x.app_id === appId);
   document.getElementById('endpoint').value = active.endpoint;
   renderForm(active.request_format);
+  refreshRequestPreview();
+  document.getElementById('status').textContent = '未実行';
+  setOutputs('');
 }
 
 function renderForm(format) {
@@ -118,7 +154,7 @@ function renderForm(format) {
     if (field.type === 'file') {
       const p = document.createElement('p');
       p.className = 'muted';
-      p.innerHTML = `<strong>${escapeHtml(field.title || key)}</strong><br>v0.4 runnerではファイルアップロードは未対応です。textareaに貼り付けて検証してください。`;
+      p.innerHTML = `<strong>${escapeHtml(field.title || key)}</strong><br>v0.5 runnerではファイルアップロードは未対応です。textareaに貼り付けて検証してください。`;
       form.appendChild(p);
       continue;
     }
@@ -153,6 +189,8 @@ function renderForm(format) {
     el.dataset.key = key;
     el.dataset.type = field.type;
     el.value = fieldDefault(field, key);
+    el.addEventListener('input', refreshRequestPreview);
+    el.addEventListener('change', refreshRequestPreview);
     form.appendChild(el);
   }
 }
@@ -160,6 +198,7 @@ function renderForm(format) {
 function loadDefaults() {
   if (!active) return;
   renderForm(active.request_format);
+  refreshRequestPreview();
   document.getElementById('status').textContent = 'デフォルト入力を復元しました';
 }
 
@@ -180,11 +219,30 @@ function collectPayload() {
   return { inputs };
 }
 
+function refreshRequestPreview() {
+  document.getElementById('payloadPreview').textContent = JSON.stringify(collectPayload(), null, 2);
+}
+
+async function loadCurl() {
+  refreshRequestPreview();
+  const res = await fetch('/api/curl', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      endpoint: document.getElementById('endpoint').value,
+      payload: collectPayload(),
+    }),
+  });
+  const body = await res.json();
+  document.getElementById('curlPreview').textContent = body.curl || body.error || '';
+  showRequestTab('curl');
+}
+
 async function runApp() {
   const status = document.getElementById('status');
-  const result = document.getElementById('result');
   status.textContent = '実行中...';
-  result.textContent = '';
+  setOutputs('');
+  refreshRequestPreview();
   try {
     const res = await fetch('/api/call', {
       method: 'POST',
@@ -197,10 +255,67 @@ async function runApp() {
     const body = await res.json();
     if (!res.ok) throw new Error(body.error || 'request failed');
     status.textContent = '成功';
-    result.textContent = body.outputs;
+    setOutputs(body.outputs);
   } catch (e) {
     status.innerHTML = `<span class="error">失敗: ${escapeHtml(e.message)}</span>`;
   }
+}
+
+function setOutputs(text) {
+  lastOutputs = text || '';
+  document.getElementById('resultRaw').textContent = lastOutputs;
+  document.getElementById('resultPreview').innerHTML = renderMarkdown(lastOutputs);
+}
+
+function showResultTab(which) {
+  document.getElementById('tab-preview').classList.toggle('active', which === 'preview');
+  document.getElementById('tab-raw').classList.toggle('active', which === 'raw');
+  document.getElementById('resultPreview').classList.toggle('hidden', which !== 'preview');
+  document.getElementById('resultRaw').classList.toggle('hidden', which !== 'raw');
+}
+
+function showRequestTab(which) {
+  document.getElementById('tab-payload').classList.toggle('active', which === 'payload');
+  document.getElementById('tab-curl').classList.toggle('active', which === 'curl');
+  document.getElementById('payloadPreview').classList.toggle('hidden', which !== 'payload');
+  document.getElementById('curlPreview').classList.toggle('hidden', which !== 'curl');
+}
+
+async function copyResult() {
+  await navigator.clipboard.writeText(lastOutputs);
+  document.getElementById('status').textContent = '結果をコピーしました';
+}
+
+function renderMarkdown(markdown) {
+  if (!markdown) return '<p class="muted">結果はまだありません。</p>';
+  const lines = String(markdown).split(/\r?\n/);
+  let html = '';
+  let inList = false;
+  for (const line of lines) {
+    if (line.startsWith('# ')) {
+      if (inList) { html += '</ul>'; inList = false; }
+      html += `<h1>${inline(escapeHtml(line.slice(2)))}</h1>`;
+    } else if (line.startsWith('## ')) {
+      if (inList) { html += '</ul>'; inList = false; }
+      html += `<h2>${inline(escapeHtml(line.slice(3)))}</h2>`;
+    } else if (line.startsWith('- ')) {
+      if (!inList) { html += '<ul>'; inList = true; }
+      html += `<li>${inline(escapeHtml(line.slice(2)))}</li>`;
+    } else if (line.trim() === '') {
+      if (inList) { html += '</ul>'; inList = false; }
+    } else {
+      if (inList) { html += '</ul>'; inList = false; }
+      html += `<p>${inline(escapeHtml(line))}</p>`;
+    }
+  }
+  if (inList) html += '</ul>';
+  return html;
+}
+
+function inline(s) {
+  return s
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/`([^`]+?)`/g, '<code>$1</code>');
 }
 
 function escapeHtml(s) {
@@ -247,6 +362,17 @@ def create_app(repo_root: Path | None = None):
             if not isinstance(request_payload, dict):
                 return JSONResponse({"error": "`payload` must be an object"}, status_code=400)
             return call_gennai_endpoint(endpoint, request_payload)
+        except EndpointError as e:
+            return JSONResponse({"error": str(e), "status": e.status}, status_code=400)
+
+    @app.post("/api/curl")
+    def curl(payload: dict[str, Any]):
+        try:
+            endpoint = str(payload.get("endpoint", ""))
+            request_payload = payload.get("payload")
+            if not isinstance(request_payload, dict):
+                return JSONResponse({"error": "`payload` must be an object"}, status_code=400)
+            return {"curl": export_curl_command(endpoint, request_payload), "payload": pretty_payload(request_payload)}
         except EndpointError as e:
             return JSONResponse({"error": str(e), "status": e.status}, status_code=400)
 

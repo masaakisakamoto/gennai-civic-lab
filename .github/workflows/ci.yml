@@ -31,3 +31,7 @@ jobs:
           python packages/gennai_evals/src/gennai_evals/runner.py evals/citizen_faq.yaml
       - name: Red-team smoke tests
         run: python packages/gennai_red_team_lite/src/gennai_red_team_lite/runner.py evals/red_team.yaml
+      - name: Eval report
+        run: python packages/gennai_evals/src/gennai_evals/runner.py --markdown-report reports/eval-report.md --json-report reports/eval-report.json evals/easy_japanese.yaml evals/citizen_faq.yaml
+      - name: FAQ import smoke test
+        run: python scripts/import_faq_corpus.py --input examples/faq_sample.csv --output /tmp/imported_faq.md --title "Imported Demo FAQ"

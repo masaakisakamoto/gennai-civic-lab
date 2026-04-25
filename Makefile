@@ -1,4 +1,4 @@
-.PHONY: install test eval eval-easy-ja eval-faq-rag red-team run-easy-ja run-faq-rag run-local-runner validate-manifests zip
+.PHONY: install test eval eval-easy-ja eval-faq-rag eval-report red-team run-easy-ja run-faq-rag run-local-runner validate-manifests import-faq-demo zip
 
 install:
 	python -m pip install --upgrade pip
@@ -20,6 +20,10 @@ eval-easy-ja:
 eval-faq-rag:
 	python packages/gennai_evals/src/gennai_evals/runner.py evals/citizen_faq.yaml
 
+eval-report:
+	mkdir -p reports
+	python packages/gennai_evals/src/gennai_evals/runner.py --markdown-report reports/eval-report.md --json-report reports/eval-report.json evals/easy_japanese.yaml evals/citizen_faq.yaml
+
 red-team:
 	python packages/gennai_red_team_lite/src/gennai_red_team_lite/runner.py evals/red_team.yaml
 
@@ -34,6 +38,9 @@ run-local-runner:
 
 validate-manifests:
 	python scripts/validate_manifests.py
+
+import-faq-demo:
+	python scripts/import_faq_corpus.py --input examples/faq_sample.csv --output apps/citizen_faq_rag/corpus/imported_faq.md --title "Imported Demo FAQ"
 
 zip:
 	cd .. && zip -r gennai-civic-lab.zip gennai-civic-lab -x 'gennai-civic-lab/.git/*' 'gennai-civic-lab/.venv/*' 'gennai-civic-lab/.pytest_cache/*' 'gennai-civic-lab/**/__pycache__/*'

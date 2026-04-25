@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.5.0
+
+- Upgraded `gennai-local-runner` with Markdown preview, raw outputs tab, payload preview, and curl export.
+- Added eval report generation via `--markdown-report`, `--json-report`, and `make eval-report`.
+- Added `scripts/import_faq_corpus.py` for CSV/JSONL to Markdown FAQ corpus import.
+- Added PII-conscious audit primitives to `gennai_app_kit`.
+- Added illustrative Local Runner asset and v0.5 implementation notes.
+- Added tests for audit events, eval reports, curl export, and FAQ corpus import.
+
+
 ## v0.4.0
 
 - Added `gennai-local-runner`, a local browser UI that renders manifest-based forms and calls localhost Gennai-compatible endpoints.

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import shlex
 import urllib.error
 import urllib.request
 from dataclasses import dataclass
@@ -26,6 +27,24 @@ def _validate_url(url: str) -> str:
             "Use an explicit reverse proxy or extend this policy for remote demos."
         )
     return url
+
+
+def pretty_payload(payload: dict[str, Any]) -> str:
+    return json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True)
+
+
+def export_curl_command(url: str, payload: dict[str, Any]) -> str:
+    """Create a reproducible curl command for a local Gennai-compatible call."""
+
+    endpoint = _validate_url(url)
+    body = pretty_payload(payload)
+    return " \\\n  ".join(
+        [
+            f"curl -X POST {shlex.quote(endpoint)}",
+            "-H 'Content-Type: application/json'",
+            f"-d {shlex.quote(body)}",
+        ]
+    )
 
 
 def call_gennai_endpoint(url: str, payload: dict[str, Any], *, timeout: float = 30.0) -> dict[str, str]:

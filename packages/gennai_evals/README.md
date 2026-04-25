@@ -19,3 +19,13 @@ cases:
 ```bash
 python packages/gennai_evals/src/gennai_evals/runner.py evals/easy_japanese.yaml
 ```
+
+
+## Reports
+
+```bash
+python packages/gennai_evals/src/gennai_evals/runner.py \
+  --markdown-report reports/eval-report.md \
+  --json-report reports/eval-report.json \
+  evals/easy_japanese.yaml evals/citizen_faq.yaml
+```

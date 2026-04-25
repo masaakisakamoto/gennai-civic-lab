@@ -47,3 +47,11 @@ Recommended demo question:
 | `gennai-local-runner` | manifestからフォームを生成し、ローカルAPIにPOSTして結果を確認する |
 | `gennai-cli` | 新しい源内互換アプリのapp/manifest/eval/testを生成する |
 | `gennai-red-team-lite` | prompt injection / PII / 根拠なし回答のsmoke testを実行する |
+
+
+## v0.5 developer-facing utilities
+
+- `gennai-local-runner`: manifest-driven local browser runner with Markdown preview and curl export.
+- `scripts/import_faq_corpus.py`: CSV/JSONL to Markdown FAQ corpus import.
+- `gennai_evals` report mode: Markdown and JSON eval reports.
+- `gennai_app_kit.audit`: PII-conscious audit event primitives.

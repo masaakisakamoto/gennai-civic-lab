@@ -26,7 +26,7 @@ from gennai_app_kit import (
 from .retriever import SearchHit, build_documents, excerpt, is_answerable, load_corpus_text
 from .search_backends import get_search_backend
 
-APP_VERSION = "0.4.0"
+APP_VERSION = "0.5.0"
 SAMPLE_CORPUS = Path(__file__).resolve().parent / "corpus" / "sample_faq.md"
 
 GENERIC_MATCH_FRAGMENTS = (

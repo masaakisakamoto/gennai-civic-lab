@@ -91,3 +91,13 @@ question + documents
   -> SearchHit[]
   -> grounded answer formatter
 ```
+
+
+## v0.5 artifact flow
+
+```text
+FAQ CSV/JSONL -> import_faq_corpus.py -> Markdown corpus -> citizen_faq_rag
+manifest JSON -> local runner -> localhost API -> outputs Markdown
+YAML evals -> eval runner -> reports/eval-report.md + reports/eval-report.json
+app call -> audit primitives -> JSONL audit event without raw PII
+```

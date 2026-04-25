@@ -1,6 +1,6 @@
 [project]
 name = "gennai-local-runner"
-version = "0.4.0"
+version = "0.5.0"
 description = "Local browser UI for trying Gennai-compatible AI apps"
 requires-python = ">=3.11"
 dependencies = ["fastapi>=0.100", "uvicorn>=0.20"]

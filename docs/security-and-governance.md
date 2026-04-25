@@ -65,3 +65,8 @@ These checks are intentionally small and deterministic. They should be expanded 
 ## Local runner endpoint policy
 
 `gennai-local-runner` only calls `http://127.0.0.1:*` and `http://localhost:*` by default. This avoids accidental remote submission during demos.
+
+
+## v0.5 audit posture
+
+The audit helper stores input summaries, fingerprints, redaction counts, request IDs, output length, and safety findings. It intentionally avoids storing raw user-provided text. Treat audit JSONL as operational metadata, not as a replacement for organizational logging, retention, or privacy policies.

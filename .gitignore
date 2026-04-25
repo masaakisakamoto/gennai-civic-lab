@@ -12,3 +12,6 @@ build/
 coverage.xml
 htmlcov/
 *.zip
+
+reports/
+apps/citizen_faq_rag/corpus/imported_faq.md

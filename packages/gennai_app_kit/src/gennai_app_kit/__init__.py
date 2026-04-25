@@ -1,3 +1,4 @@
+from .audit import AuditEvent, AuditTimer, append_audit_event, create_audit_event, stable_hash, summarize_inputs
 from .core import (
     GennaiPayloadError,
     GennaiValidationError,
@@ -24,6 +25,12 @@ from .llm import ChatMessage, LLMClient, LLMResult, OfflineLLMClient, OpenAIComp
 from .manifest import checkbox, file, hidden, manifest, number, radio, select, text, textarea, validate_manifest
 
 __all__ = [
+    "AuditEvent",
+    "AuditTimer",
+    "append_audit_event",
+    "create_audit_event",
+    "stable_hash",
+    "summarize_inputs",
     "ChatMessage",
     "GennaiPayloadError",
     "GennaiValidationError",

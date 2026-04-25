@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-label="Illustrative screenshot of Gennai Local Runner v0.5">
+  <rect width="1200" height="720" fill="#f7f7f8"/>
+  <rect x="0" y="0" width="1200" height="118" fill="#111827"/>
+  <text x="42" y="42" fill="#c7d2fe" font-family="system-ui, sans-serif" font-size="16" font-weight="700">v0.5 developer experience</text>
+  <text x="42" y="82" fill="white" font-family="system-ui, sans-serif" font-size="34" font-weight="800">Gennai Local Runner</text>
+  <rect x="42" y="150" width="330" height="300" rx="16" fill="white" stroke="#e5e7eb"/>
+  <text x="66" y="192" fill="#111827" font-family="system-ui, sans-serif" font-size="24" font-weight="750">App</text>
+  <rect x="66" y="220" width="282" height="42" rx="10" fill="#f9fafb" stroke="#d1d5db"/>
+  <text x="82" y="247" fill="#374151" font-family="system-ui, sans-serif" font-size="15">Citizen FAQ RAG</text>
+  <rect x="66" y="294" width="282" height="42" rx="10" fill="#f9fafb" stroke="#d1d5db"/>
+  <text x="82" y="321" fill="#374151" font-family="system-ui, sans-serif" font-size="15">http://127.0.0.1:8001/</text>
+  <rect x="66" y="365" width="112" height="40" rx="20" fill="#e5e7eb"/>
+  <text x="86" y="390" fill="#111827" font-family="system-ui, sans-serif" font-size="14" font-weight="700">Defaults</text>
+  <rect x="190" y="365" width="84" height="40" rx="20" fill="#111827"/>
+  <text x="218" y="390" fill="white" font-family="system-ui, sans-serif" font-size="14" font-weight="700">Run</text>
+  <rect x="400" y="150" width="520" height="300" rx="16" fill="white" stroke="#e5e7eb"/>
+  <text x="424" y="192" fill="#111827" font-family="system-ui, sans-serif" font-size="24" font-weight="750">Inputs</text>
+  <rect x="424" y="220" width="472" height="86" rx="10" fill="#f9fafb" stroke="#d1d5db"/>
+  <text x="444" y="255" fill="#374151" font-family="system-ui, sans-serif" font-size="17">子ども医療費助成の申請に必要なものを教えてください</text>
+  <rect x="424" y="330" width="190" height="38" rx="10" fill="#eef2ff"/>
+  <text x="444" y="354" fill="#3730a3" font-family="system-ui, sans-serif" font-size="14" font-weight="700">retrieval_backend: hybrid</text>
+  <rect x="42" y="480" width="1118" height="170" rx="16" fill="white" stroke="#e5e7eb"/>
+  <text x="66" y="522" fill="#111827" font-family="system-ui, sans-serif" font-size="24" font-weight="750">Markdown preview</text>
+  <text x="66" y="562" fill="#111827" font-family="system-ui, sans-serif" font-size="20" font-weight="750">市民FAQ RAG 回答案</text>
+  <text x="66" y="598" fill="#374151" font-family="system-ui, sans-serif" font-size="16">回答可能性: 参照文書に基づいて回答可能 / source: FAQ-001 / 検索方式: hybrid</text>
+  <text x="66" y="628" fill="#374151" font-family="system-ui, sans-serif" font-size="16">根拠・抜粋・担当者確認チェック・安全性メモを表示</text>
+  <text x="918" y="680" fill="#6b7280" font-family="system-ui, sans-serif" font-size="12">illustrative mock screenshot</text>
+</svg>
