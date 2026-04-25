@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Safety | gennai-civic-lab</title>
+  <meta name="description" content="Safety principles for gennai-civic-lab, an open-source civic AI lab." />
+  <link rel="stylesheet" href="./assets/site.css" />
+</head>
+<body>
+  <div class="page">
+    <header>
+      <a class="brand" href="./">gennai-civic-lab</a>
+      <nav>
+        <a href="./">Home</a>
+        <a href="./use-cases.html">Use cases</a>
+        <a href="./ja/safety.html">日本語</a>
+        <a href="https://github.com/masaakisakamoto/gennai-civic-lab">GitHub</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="eyebrow">Safety principles</div>
+        <h1>Public AI should be useful, explainable, and reviewable.</h1>
+        <p class="lead">
+          gennai-civic-lab treats safety as part of the system design, not as an afterthought.
+          The project is built around small experiments, local testing, human review, and auditable workflows.
+        </p>
+      </section>
+
+      <section>
+        <div class="section-title">
+          <h2>Core safety ideas</h2>
+          <p>
+            These principles guide the project before any AI app is considered for real-world use.
+          </p>
+        </div>
+
+        <div class="grid">
+          <article class="card">
+            <h3>Do not rush into production</h3>
+            <p>Start with local experiments, sample data, and limited review workflows before exposing systems to real users.</p>
+          </article>
+          <article class="card">
+            <h3>Keep humans in the loop</h3>
+            <p>AI outputs should be treated as drafts or support material, especially in civic and public-sector contexts.</p>
+          </article>
+          <article class="card">
+            <h3>Avoid unsupported claims</h3>
+            <p>When evidence is weak, the system should abstain or recommend checking with the responsible office.</p>
+          </article>
+          <article class="card">
+            <h3>Minimize sensitive logging</h3>
+            <p>Operational logs should focus on metadata and avoid storing raw citizen text or personal information.</p>
+          </article>
+          <article class="card">
+            <h3>Evaluate continuously</h3>
+            <p>Use evals, red-team smoke tests, and operational reports to detect regressions and unsafe behavior.</p>
+          </article>
+          <article class="card">
+            <h3>Make behavior inspectable</h3>
+            <p>Prefer visible sources, trace identifiers, reproducible requests, and transparent quality checks.</p>
+          </article>
+        </div>
+      </section>
+
+      <section>
+        <div class="principle">
+          <p>Safety is not a feature. It is a workflow.</p>
+          <span>
+            Public AI systems should be designed so that people can test them, review them,
+            improve them, and stop them when confidence is not high enough.
+          </span>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-title">
+          <h2>What this project currently includes</h2>
+          <p>
+            gennai-civic-lab includes practical building blocks for safer experimentation.
+          </p>
+        </div>
+
+        <div class="grid">
+          <article class="card large">
+            <h3>Evaluation and red-team checks</h3>
+            <p>Evaluation cases and red-team smoke tests help verify expected behavior, prompt-injection handling, and abstention behavior.</p>
+          </article>
+          <article class="card">
+            <h3>Observability</h3>
+            <p>Health checks, local metrics, trace IDs, and operational reports help make behavior easier to inspect.</p>
+          </article>
+          <article class="card">
+            <h3>Local-first testing</h3>
+            <p>Local Runner makes it possible to test AI app behavior before connecting it to real operational workflows.</p>
+          </article>
+        </div>
+      </section>
+
+      <section>
+        <div class="notice">
+          <strong>Unofficial project.</strong>
+          gennai-civic-lab is an independent open-source experiment.
+          It is not affiliated with, endorsed by, or operated by the Digital Agency or any government organization.
+          Real public-sector use requires local policy, privacy, accessibility, security, and operational review.
+        </div>
+      </section>
+
+    </main>
+
+    <footer>
+      <span>Created by Masaaki Sakamoto</span>
+      <span>Safety, auditability, and human-centered AI for civic use.</span>
+    </footer>
+  </div>
+</body>
+</html>

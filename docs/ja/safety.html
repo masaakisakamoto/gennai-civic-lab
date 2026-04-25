@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>安全性について | gennai-civic-lab</title>
+  <meta name="description" content="gennai-civic-labが大切にしている公共AIの安全性・説明責任・監査性について。" />
+  <link rel="stylesheet" href="../assets/site.css" />
+</head>
+<body>
+  <div class="page">
+    <header>
+      <a class="brand" href="./">gennai-civic-lab</a>
+      <nav>
+        <a href="./">Home</a>
+        <a href="./use-cases.html">利用シーン</a>
+        <a href="../safety.html">English</a>
+        <a href="https://github.com/masaakisakamoto/gennai-civic-lab">GitHub</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="eyebrow">公共AIの安全性</div>
+        <h1>便利さだけではなく、説明できること。</h1>
+        <p class="lead">
+          gennai-civic-lab では、AIをただ動かすだけでなく、
+          人間が確認できること、後から検証できること、根拠が弱いときに止まれることを大切にしています。
+        </p>
+      </section>
+
+      <section>
+        <div class="section-title">
+          <h2>大切にしている考え方</h2>
+          <p>
+            公共性の高い領域でAIを使う前に、まず確認すべき基本方針です。
+          </p>
+        </div>
+
+        <div class="grid">
+          <article class="card">
+            <h3>本番投入を急がない</h3>
+            <p>まずはローカル環境、サンプルデータ、小さな検証から始めます。</p>
+          </article>
+          <article class="card">
+            <h3>人間が確認する</h3>
+            <p>AIの出力は、特に公共領域では最終判断ではなく、下書きや補助として扱います。</p>
+          </article>
+          <article class="card">
+            <h3>根拠なしに断定しない</h3>
+            <p>根拠が弱い場合は、無理に答えず、担当部署への確認を促します。</p>
+          </article>
+          <article class="card">
+            <h3>個人情報を安易に残さない</h3>
+            <p>ログには本文そのものではなく、必要最小限のメタデータを残す方針を重視します。</p>
+          </article>
+          <article class="card">
+            <h3>継続的に評価する</h3>
+            <p>eval、基本的な安全性テスト smoke test、運用レポートを使い、変更による劣化を確認します。</p>
+          </article>
+          <article class="card">
+            <h3>ふるまいを確認できる</h3>
+            <p>参照元、trace ID、再現可能なリクエスト、品質チェックを見える形にします。</p>
+          </article>
+        </div>
+      </section>
+
+      <section>
+        <div class="principle">
+          <p>安全性は、機能ではなく運用の流れです。</p>
+          <span>
+            公共AIは、作って終わりではありません。
+            試し、確認し、改善し、必要なときに止められる構造が大切です。
+          </span>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-title">
+          <h2>このプロジェクトに入っている仕組み</h2>
+          <p>
+            安全に試すための小さな部品を、OSSとして少しずつ整えています。
+          </p>
+        </div>
+
+        <div class="grid">
+          <article class="card large">
+            <h3>評価と基本的な安全性テスト</h3>
+            <p>期待した動きになっているか、プロンプトインジェクションに弱くないか、根拠がないときに止まれるかを確認します。</p>
+          </article>
+          <article class="card">
+            <h3>観測性</h3>
+            <p>health check、metrics、trace ID、運用レポートで、AIアプリのふるまいを確認しやすくします。</p>
+          </article>
+          <article class="card">
+            <h3>ローカル優先</h3>
+            <p>Local Runnerを使い、実運用に接続する前に手元で安全に確認できます。</p>
+          </article>
+        </div>
+      </section>
+
+      <section>
+        <div class="notice">
+          <strong>非公式プロジェクトです。</strong>
+          gennai-civic-lab は独立したOSS実験プロジェクトであり、
+          デジタル庁その他の政府機関による公式プロジェクトではありません。
+          実際の公共利用には、制度・個人情報・アクセシビリティ・セキュリティ・運用体制の確認が必要です。
+        </div>
+      </section>
+
+    </main>
+
+    <footer>
+      <span>Created by Masaaki Sakamoto</span>
+      <span>市民に近い場所で、信頼できるAIを育てる。</span>
+    </footer>
+  </div>
+</body>
+</html>
