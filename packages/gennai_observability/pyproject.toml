@@ -1,6 +1,6 @@
 [project]
 name = "gennai-observability"
-version = "0.6.0"
+version = "0.7.0"
 description = "PII-conscious tracing, metrics, and operational reporting for Gennai-compatible apps"
 requires-python = ">=3.11"
 dependencies = []

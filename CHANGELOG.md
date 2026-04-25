@@ -1,5 +1,23 @@
 # Changelog
 
+## v0.7.0
+
+### Added
+
+- Persistent BM25 index builder for `citizen_faq_rag`.
+- Corpus fingerprinting and version metadata for reproducible RAG demos.
+- `make build-faq-index` and `scripts/build_faq_index.py`.
+- Local Runner file input support for text-like manifest fields.
+- `make release-readiness` and `scripts/release_readiness.py`.
+- v0.7 launch assets for X and Instagram.
+- `docs/release-and-launch.md`, `docs/rag-indexing.md`, and release-card SVG.
+
+### Improved
+
+- Dockerfile now installs `gennai_observability` in container builds.
+- Citizen FAQ RAG can use `persistent_bm25` and `hybrid_persistent` retrieval modes.
+- README now explains launch readiness and the persistent index flow.
+
 ## v0.6.0
 
 ### Added

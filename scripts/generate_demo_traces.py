@@ -1,7 +1,11 @@
 from __future__ import annotations
 
 import argparse
+import sys
 from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "packages" / "gennai_observability" / "src"))
 
 from gennai_observability import JsonlTraceExporter, TraceEvent, traced_call
 
@@ -22,7 +26,7 @@ def main(argv: list[str] | None = None) -> int:
     traced_call(
         lambda: {"outputs": "ok"},
         app_id="easy_japanese_rewriter",
-        app_version="0.6.0",
+        app_version="0.7.0",
         exporter=exporter,
         metadata={"mode": "safe"},
         events=[TraceEvent("rewrite.completed", metadata={"redactions": 0})],
@@ -30,7 +34,7 @@ def main(argv: list[str] | None = None) -> int:
     traced_call(
         lambda: {"outputs": "ok"},
         app_id="citizen_faq_rag",
-        app_version="0.6.0",
+        app_version="0.7.0",
         exporter=exporter,
         metadata={"retrieval_backend": "hybrid"},
         events=[
@@ -41,7 +45,7 @@ def main(argv: list[str] | None = None) -> int:
     traced_call(
         lambda: {"outputs": "abstained"},
         app_id="citizen_faq_rag",
-        app_version="0.6.0",
+        app_version="0.7.0",
         exporter=exporter,
         metadata={"retrieval_backend": "hybrid"},
         events=[

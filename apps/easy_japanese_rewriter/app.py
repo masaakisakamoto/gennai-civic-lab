@@ -27,7 +27,7 @@ from gennai_app_kit import (
     require_text,
 )
 
-APP_VERSION = "0.6.0"
+APP_VERSION = "0.7.0"
 MAX_TEXT_CHARS = 12_000
 
 REPLACEMENTS: dict[str, str] = {

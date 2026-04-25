@@ -16,7 +16,7 @@ except Exception:  # pragma: no cover
     HTMLResponse = None
     JSONResponse = None
 
-APP_VERSION = "0.6.0"
+APP_VERSION = "0.7.0"
 
 
 HTML = r"""
@@ -61,9 +61,9 @@ HTML = r"""
 </head>
 <body>
 <header>
-  <div class="pill">v0.5 developer experience</div>
+  <div class="pill">v0.7 launch-ready developer experience</div>
   <h1>Gennai Local Runner</h1>
-  <p>manifestからフォームを生成し、ローカルの源内互換APIへPOSTし、<code>outputs</code> Markdownをプレビューします。</p>
+  <p>manifestからフォームを生成し、ファイル入力も含めてローカルの源内互換APIへPOSTし、<code>outputs</code> Markdownをプレビューします。</p>
 </header>
 <main>
   <aside>
@@ -152,10 +152,24 @@ function renderForm(format) {
   for (const [key, field] of Object.entries(format)) {
     if (field.type === 'hidden') continue;
     if (field.type === 'file') {
-      const p = document.createElement('p');
-      p.className = 'muted';
-      p.innerHTML = `<strong>${escapeHtml(field.title || key)}</strong><br>v0.5 runnerではファイルアップロードは未対応です。textareaに貼り付けて検証してください。`;
-      form.appendChild(p);
+      const label = document.createElement('label');
+      label.textContent = field.title || key;
+      label.htmlFor = `field-${key}`;
+      form.appendChild(label);
+      if (field.desc) {
+        const small = document.createElement('small');
+        small.textContent = field.desc + ' Local Runner v0.7はテキスト系ファイルをbase64化してinputs.filesへ入れます。';
+        form.appendChild(small);
+      }
+      const el = document.createElement('input');
+      el.type = 'file';
+      el.id = `field-${key}`;
+      el.dataset.key = key;
+      el.dataset.type = field.type;
+      if (field.multiple) el.multiple = true;
+      if (field.accept) el.accept = field.accept;
+      el.addEventListener('change', refreshRequestPreview);
+      form.appendChild(el);
       continue;
     }
     const label = document.createElement('label');
@@ -202,7 +216,7 @@ function loadDefaults() {
   document.getElementById('status').textContent = 'デフォルト入力を復元しました';
 }
 
-function collectPayload() {
+async function collectPayload() {
   const inputs = {};
   for (const [key, field] of Object.entries(active.request_format)) {
     if (field.type === 'hidden') {
@@ -213,24 +227,48 @@ function collectPayload() {
   for (const el of document.querySelectorAll('[data-key]')) {
     const key = el.dataset.key;
     const type = el.dataset.type;
-    if (type === 'number') inputs[key] = Number(el.value);
+    if (type === 'file') {
+      const files = await filesToPayload(key, el.files || []);
+      if (files.length) {
+        if (!Array.isArray(inputs.files)) inputs.files = [];
+        inputs.files.push({key, files});
+      }
+    } else if (type === 'number') inputs[key] = Number(el.value);
     else inputs[key] = el.value;
   }
   return { inputs };
 }
 
-function refreshRequestPreview() {
-  document.getElementById('payloadPreview').textContent = JSON.stringify(collectPayload(), null, 2);
+async function refreshRequestPreview() {
+  document.getElementById('payloadPreview').textContent = JSON.stringify(await collectPayload(), null, 2);
+}
+
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result).split(',')[1] || '');
+    reader.onerror = () => reject(reader.error);
+    reader.readAsDataURL(file);
+  });
+}
+
+async function filesToPayload(key, fileList) {
+  const files = [];
+  for (const file of Array.from(fileList)) {
+    files.push({filename: file.name, content: await fileToBase64(file)});
+  }
+  return files;
 }
 
 async function loadCurl() {
-  refreshRequestPreview();
+  await refreshRequestPreview();
+  const payload = await collectPayload();
   const res = await fetch('/api/curl', {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({
       endpoint: document.getElementById('endpoint').value,
-      payload: collectPayload(),
+      payload,
     }),
   });
   const body = await res.json();
@@ -242,14 +280,15 @@ async function runApp() {
   const status = document.getElementById('status');
   status.textContent = '実行中...';
   setOutputs('');
-  refreshRequestPreview();
+  await refreshRequestPreview();
   try {
+    const payload = await collectPayload();
     const res = await fetch('/api/call', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
         endpoint: document.getElementById('endpoint').value,
-        payload: collectPayload(),
+        payload,
       }),
     });
     const body = await res.json();

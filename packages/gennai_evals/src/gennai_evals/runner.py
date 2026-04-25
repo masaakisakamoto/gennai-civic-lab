@@ -173,7 +173,8 @@ def main(argv: list[str]) -> int:
 
     repo_root = Path(__file__).resolve().parents[4]
     sys.path.insert(0, str(repo_root))
-    sys.path.insert(0, str(repo_root / "packages" / "gennai_app_kit" / "src"))
+    for package_src in sorted((repo_root / "packages").glob("*/src")):
+        sys.path.insert(0, str(package_src))
 
     records: list[EvalCaseRecord] = []
     for file_arg in args.files:

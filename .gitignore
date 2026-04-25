@@ -15,3 +15,4 @@ htmlcov/
 
 reports/
 apps/citizen_faq_rag/corpus/imported_faq.md
+.gennai/

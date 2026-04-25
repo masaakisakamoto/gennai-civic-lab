@@ -28,7 +28,7 @@ from gennai_app_kit import (
 from .retriever import SearchHit, build_documents, excerpt, is_answerable, load_corpus_text
 from .search_backends import get_search_backend
 
-APP_VERSION = "0.6.0"
+APP_VERSION = "0.7.0"
 SAMPLE_CORPUS = Path(__file__).resolve().parent / "corpus" / "sample_faq.md"
 
 GENERIC_MATCH_FRAGMENTS = (
@@ -197,7 +197,7 @@ def handle(payload: dict[str, Any]) -> dict[str, str]:
         mode = get_choice(inputs, "mode", allowed=["safe", "preserve"], default="safe")
         style = get_choice(inputs, "answer_style", allowed=["市民向け", "職員向け", "短く"], default="市民向け")
         max_results = _as_int(inputs.get("max_results"), default=3, minimum=1, maximum=6)
-        retrieval_backend_name = get_choice(inputs, "retrieval_backend", allowed=["lexical", "bm25", "hybrid"], default="lexical")
+        retrieval_backend_name = get_choice(inputs, "retrieval_backend", allowed=["lexical", "bm25", "hybrid", "persistent_bm25", "hybrid_persistent"], default="lexical")
 
         corpora = _collect_corpora(inputs)
         if not corpora:
@@ -242,6 +242,7 @@ def handle(payload: dict[str, Any]) -> dict[str, str]:
                 ("安全性メモ", _format_safety_notes(safe_question, safe_corpora, pii_counts)),
                 ("品質メモ", [
                     f"deterministic {backend.name} retrieverで検索しています。外部APIキーなしで再現可能です。",
+                    "v0.7では永続BM25 indexとcorpus fingerprintにより、RAG品質の再現性を確認できます。",
                     "本番では、自治体公式FAQ・要綱・更新日付き文書に差し替えてください。",
                     "根拠なし断定を避けるため、低スコア時は担当課確認へ誘導します。",
                     f"アプリ版: {APP_VERSION}",

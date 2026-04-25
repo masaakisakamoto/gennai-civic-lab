@@ -1,4 +1,4 @@
-.PHONY: install test eval eval-easy-ja eval-faq-rag eval-report demo-traces ops-report red-team run-easy-ja run-faq-rag run-local-runner validate-manifests import-faq-demo zip
+.PHONY: install test eval eval-easy-ja eval-faq-rag eval-report demo-traces ops-report red-team build-faq-index release-readiness run-easy-ja run-faq-rag run-local-runner validate-manifests import-faq-demo zip
 
 install:
 	python -m pip install --upgrade pip
@@ -34,6 +34,13 @@ demo-traces:
 
 ops-report: eval-report demo-traces
 	python scripts/generate_ops_report.py --eval-json reports/eval-report.json --traces-jsonl reports/traces.jsonl --markdown-report reports/ops-report.md --json-report reports/ops-report.json
+
+build-faq-index:
+	python scripts/build_faq_index.py --corpus apps/citizen_faq_rag/corpus/sample_faq.md --output .gennai/index/citizen_faq_bm25.json --corpus-id sample_faq
+
+release-readiness:
+	mkdir -p reports
+	python scripts/release_readiness.py --release v0.7 --output reports/release-readiness.md --json-output reports/release-readiness.json
 
 run-easy-ja:
 	uvicorn apps.easy_japanese_rewriter.app:app --reload --port 8000

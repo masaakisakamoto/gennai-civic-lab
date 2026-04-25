@@ -88,7 +88,7 @@ def build_default_inputs(request_format: dict[str, Any]) -> dict[str, Any]:
             inputs[key] = field.get("default_value", "")
         elif field_type == "file":
             # Gennai file inputs are represented in inputs.files. The browser runner keeps
-            # file upload out of scope for v0.4 and encourages text/Markdown pasting first.
+            # file defaults empty; v0.7 browser UI can attach text-like files manually.
             continue
     return inputs
 

@@ -10,18 +10,21 @@
 
 ![Gennai Operational Report v0.6](docs/assets/ops-report-v0.6.svg)
 
+![Gennai v0.7 release card](docs/assets/release-card-v0.7.svg)
+
 ## What this repository demonstrates
 
 `gennai-civic-lab` is not a prompt demo. It is a small but coherent engineering system for public-sector AI apps:
 
 - **Gennai-compatible app contract**: request `inputs`, response `{ "outputs": "Markdown text" }`
 - **Civic AI apps**: easy Japanese rewriting and grounded citizen FAQ RAG
-- **Developer experience**: local browser runner, manifest-driven forms, curl export
+- **Developer experience**: local browser runner, manifest-driven forms, file inputs, curl export
 - **Quality gates**: unit tests, manifest validation, YAML evals, red-team smoke tests
 - **Safety posture**: PII redaction helpers, prompt-injection detection, abstention on weak evidence
 - **Operational artifacts**: Markdown/JSON eval reports, metadata-first traces, metrics summaries, and PII-conscious audit event primitives
 - **Data onboarding**: CSV/JSONL FAQ corpus import for `citizen_faq_rag`
 - **Deployment readiness**: local, Docker Compose, AWS, and Azure blueprints
+- **Launch readiness**: persistent RAG index, release-readiness checks, and social launch templates
 
 ## Architecture
 
@@ -45,7 +48,7 @@ flowchart LR
 ```text
 apps/
   easy_japanese_rewriter/      # v0.2 flagship app
-  citizen_faq_rag/             # v0.3 grounded FAQ RAG app
+  citizen_faq_rag/             # grounded FAQ RAG app with v0.7 persistent BM25 index
   meeting_summary/
   sports_promotion_advisor/
   policy_briefing/
@@ -55,7 +58,7 @@ packages/
   gennai_app_kit/              # SDK: request/response, guardrails, LLM adapter, audit primitives
   gennai_evals/                # YAML eval runner + report writer
   gennai_cli/                  # app scaffold CLI
-  gennai_local_runner/         # v0.5 local browser UI, Markdown preview, curl export
+  gennai_local_runner/         # local browser UI, Markdown preview, file input, curl export
   gennai_form_spec/            # manifest JSON Schema
   gennai_red_team_lite/        # prompt-injection / PII / hallucination smoke tests
   gennai_observability/        # v0.6 traces, metrics summaries, operational reports
@@ -65,11 +68,14 @@ scripts/
   import_faq_corpus.py
   generate_demo_traces.py
   generate_ops_report.py
+  build_faq_index.py
+  release_readiness.py
 
 manifests/                     # 源内Webに登録するリクエスト形式JSON例
 evals/                         # 評価ケース
 docs/                          # 設計・セキュリティ・OSS戦略
 blueprints/                    # local / Docker Compose / AWS / Azure deployment notes
+launch/                        # v0.7 X / Instagram launch drafts
 tests/                         # unit tests
 ```
 
@@ -85,6 +91,8 @@ make eval
 make red-team
 make eval-report
 make ops-report
+make build-faq-index
+make release-readiness
 ```
 
 Expected quality gates:
@@ -155,6 +163,51 @@ It returns:
 
 When evidence is weak, it abstains instead of inventing an answer.
 
+## Build a persistent FAQ index
+
+v0.7 adds a deterministic persistent BM25 index with corpus fingerprinting. This makes RAG demos easier to reproduce and gives reviewers a concrete artifact to inspect.
+
+```bash
+make build-faq-index
+```
+
+Output:
+
+```text
+.gennai/index/citizen_faq_bm25.json
+```
+
+The generated index is ignored by Git. Do not commit indexes built from confidential or personal data.
+
+To use it in the FAQ app, select `persistent_bm25` or `hybrid_persistent` in Local Runner, or pass it in curl:
+
+```json
+{
+  "inputs": {
+    "question": "子ども医療費助成の申請に必要なものを教えてください",
+    "use_sample_corpus": "yes",
+    "retrieval_backend": "persistent_bm25"
+  }
+}
+```
+
+## Release readiness and launch assets
+
+v0.7 includes a small launch kit for announcing the project after quality gates pass.
+
+```bash
+make release-readiness
+```
+
+Relevant files:
+
+```text
+docs/release-and-launch.md
+launch/social/x-thread-v0.7.md
+launch/social/instagram-carousel-v0.7.md
+launch/social/launch-calendar.md
+```
+
 ## Generate eval reports
 
 ```bash
@@ -176,6 +229,8 @@ v0.6 adds metadata-first traces and an operational report. This gives reviewers 
 
 ```bash
 make ops-report
+make build-faq-index
+make release-readiness
 ```
 
 Outputs:

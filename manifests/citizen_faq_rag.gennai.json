@@ -82,7 +82,7 @@
   "retrieval_backend": {
     "type": "select",
     "title": "検索方式",
-    "desc": "ローカルで再現可能な検索方式を選びます。hybridはlexicalとBM25を組み合わせます。",
+    "desc": "ローカルで再現可能な検索方式を選びます。v0.7では永続BM25 indexも選べます。",
     "required": true,
     "items": [
       {
@@ -96,6 +96,14 @@
       {
         "title": "Hybrid（Lexical + BM25）",
         "value": "hybrid"
+      },
+      {
+        "title": "Persistent BM25（永続index優先）",
+        "value": "persistent_bm25"
+      },
+      {
+        "title": "Hybrid Persistent（Lexical + 永続BM25）",
+        "value": "hybrid_persistent"
       }
     ],
     "default_value": "lexical"

@@ -24,3 +24,8 @@ Open:
 ```text
 http://127.0.0.1:8010/
 ```
+
+
+## v0.7
+
+Local Runner can now encode text-like file inputs into `inputs.files`, preview the JSON payload, and export a matching curl command.

@@ -1,6 +1,6 @@
 [project]
 name = "gennai-app-kit"
-version = "0.6.0"
+version = "0.7.0"
 description = "SDK for Gennai-compatible civic AI apps"
 requires-python = ">=3.11"
 readme = "README.md"

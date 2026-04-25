@@ -86,7 +86,8 @@ def main(argv: list[str] | None = None) -> int:
 
     repo_root = Path(__file__).resolve().parents[4]
     sys.path.insert(0, str(repo_root))
-    sys.path.insert(0, str(repo_root / "packages" / "gennai_app_kit" / "src"))
+    for package_src in sorted((repo_root / "packages").glob("*/src")):
+        sys.path.insert(0, str(package_src))
 
     failures = sum(run_file(Path(file)) for file in argv)
     return 1 if failures else 0

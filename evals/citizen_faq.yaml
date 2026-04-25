@@ -88,3 +88,18 @@ cases:
       - 体育館
       - "検索方式: hybrid"
       - 回答可能性: 参照文書に基づいて回答可能
+
+  - name: persistent bm25 backend returns source
+    input:
+      inputs:
+        question: 子ども医療費助成の申請に必要なものを教えてください
+        use_sample_corpus: yes
+        answer_style: 市民向け
+        mode: safe
+        retrieval_backend: persistent_bm25
+        max_results: 3
+    expect_contains:
+      - 子ども医療費助成
+      - FAQ-001
+      - "検索方式: persistent_bm25"
+      - 回答可能性: 参照文書に基づいて回答可能

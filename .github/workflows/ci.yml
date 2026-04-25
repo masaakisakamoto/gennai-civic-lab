@@ -40,3 +40,8 @@ jobs:
         run: |
           python scripts/generate_demo_traces.py --output reports/traces.jsonl
           python scripts/generate_ops_report.py --eval-json reports/eval-report.json --traces-jsonl reports/traces.jsonl --markdown-report reports/ops-report.md --json-report reports/ops-report.json
+
+      - name: Build FAQ persistent index
+        run: python scripts/build_faq_index.py --corpus apps/citizen_faq_rag/corpus/sample_faq.md --output /tmp/citizen_faq_bm25.json --corpus-id sample_faq
+      - name: Release readiness
+        run: python scripts/release_readiness.py --release v0.7 --output reports/release-readiness.md --json-output reports/release-readiness.json

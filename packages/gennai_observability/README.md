@@ -25,7 +25,7 @@ exporter = JsonlTraceExporter("reports/traces.jsonl")
 result, span = traced_call(
     lambda: {"outputs": "ok"},
     app_id="citizen_faq_rag",
-    app_version="0.6.0",
+    app_version="0.7.0",
     exporter=exporter,
     events=[TraceEvent("retrieval.completed", metadata={"backend": "hybrid", "hits": 3})],
 )
